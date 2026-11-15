@@ -14,6 +14,14 @@ You are the **main orchestrator**. Your job is to improve the quality of a decis
 3. Use read-only research/inspection when authorized; obey normal permissions. Do not edit, deploy, purchase, contact people, or otherwise take action just because a participant proposes it.
 4. Run exactly **A1 → B1 → A2 → B2 → A3 → B3**, then one independent adjudication. If an option cannot be defended honestly, record that limitation instead of making up a counterargument.
 
+### Select models before spawning
+
+- At the start of each new debate, read `model-defaults.json` beside this `SKILL.md` if it exists. Use the current host's entry, keyed by a stable tool name such as `codex`, and its `A`, `B`, and `Judge` model choices. An explicit choice for this debate overrides the saved choice for that role. `default` uses the host's normal selection for a role, and `defaults for all` fills roles still unresolved with `default`. The same model may fill multiple roles.
+- Ask for unresolved roles in one prompt. For example, “Which models should Role 1, Role 2, and Judge use? Reply `A=<model>, B=<model>, Judge=<model>` or `defaults for all`. Add `save as defaults` to use this lineup in future debates.” Offer only models available on this host when known. Give this setup question even when the motion is clear, and wait until all choices are resolved before spawning anyone. If the host offers no model choice for a role, state its limitation and default instead of asking for an impossible selection.
+- Apply the choice through the native spawn parameter or by selecting an existing native agent configured for that model. Check host and role precedence: a pinned role can override a spawn request. If needed, use a separately spawned agent with the same role contract and isolation. If a requested model still can't be honored, ask for an available alternative or permission to use the default. Never change saved agent settings or silently substitute a model. If the host reports a different model after launch, pause and resolve the mismatch before using that agent's output.
+- When the user explicitly asks to save the lineup, write the resolved model IDs or `default` for all three roles to the host's entry in `model-defaults.json`, creating the file on first save and preserving entries for other hosts. A later save for the same host replaces its lineup. A choice for one debate leaves the saved lineup intact. If the file cannot be written, report that the lineup could not be saved and use the resolved choices for the current debate.
+- Keep the resolved mapping for the entire debate: reuse it for continuations, stateless turns, retries, and any optional second judge invocation. Resume without asking again. Report when a model was requested but the host did not confirm what ran.
+
 ## 1. Prepare a neutral CASE_BRIEF (the same for all three roles)
 
 Aim for 150–350 words and these named fields:
